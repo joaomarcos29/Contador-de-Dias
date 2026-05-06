@@ -14,7 +14,7 @@
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       text-align: center;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: #000000;
       min-height: 100vh;
       padding: 20px;
       display: flex;
@@ -23,31 +23,38 @@
     }
 
     .container {
-      background: white;
+      background: #ffffff;
       border-radius: 20px;
       padding: 40px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 20px 60px rgba(255, 255, 255, 0.1);
       max-width: 500px;
       width: 100%;
+      border: 2px solid #000000;
     }
 
     h1 {
       font-size: 2.5em;
-      color: #333;
+      color: #000000;
       margin-bottom: 10px;
+      font-weight: 700;
     }
 
     .subtitle {
-      color: #777;
+      color: #555555;
       font-size: 0.9em;
       margin-bottom: 30px;
+      font-weight: 500;
     }
 
     #contador {
       font-size: 3em;
       font-weight: bold;
       margin: 30px 0;
-      color: #667eea;
+      color: #000000;
+      border: 3px solid #000000;
+      padding: 20px;
+      border-radius: 15px;
+      background: #f0f0f0;
     }
 
     .button-group {
@@ -62,19 +69,19 @@
       padding: 12px 24px;
       font-size: 1em;
       cursor: pointer;
-      border: none;
+      border: 2px solid #000000;
       border-radius: 10px;
-      background-color: #667eea;
+      background-color: #000000;
       color: white;
       font-weight: bold;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
     }
 
     button:hover {
-      background-color: #764ba2;
+      background-color: #333333;
+      border-color: #333333;
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
     }
 
     button:active {
@@ -82,21 +89,43 @@
     }
 
     .btn-zerar {
-      background-color: #ff6b6b;
-      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+      background-color: #ffffff;
+      color: #000000;
+      border: 2px solid #000000;
     }
 
     .btn-zerar:hover {
-      background-color: #ee5a52;
-      box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+      background-color: #f0f0f0;
+      border-color: #000000;
+    }
+
+    .btn-salvar {
+      background-color: #000000;
+      color: white;
+      border: 2px solid #000000;
+      flex: 1;
+      min-width: 150px;
+    }
+
+    .btn-salvar:hover {
+      background-color: #333333;
+    }
+
+    .btn-salvar.salvo {
+      background-color: #000000;
+    }
+
+    .btn-salvar.salvo::after {
+      content: " ✓";
     }
 
     #mensagem {
       margin-top: 30px;
       font-size: 1.1em;
-      color: #333;
+      color: #000000;
       min-height: 60px;
       animation: slideIn 0.5s ease;
+      font-weight: 500;
     }
 
     @keyframes slideIn {
@@ -111,18 +140,26 @@
     }
 
     .info-box {
-      background: #f0f4ff;
-      border-left: 4px solid #667eea;
+      background: #f0f0f0;
+      border-left: 4px solid #000000;
+      border: 2px solid #000000;
       padding: 15px;
       margin-top: 20px;
       border-radius: 8px;
       text-align: left;
       font-size: 0.9em;
-      color: #555;
+      color: #000000;
     }
 
     .info-box strong {
-      color: #667eea;
+      color: #000000;
+    }
+
+    .status-salvo {
+      font-size: 0.8em;
+      color: #666666;
+      margin-top: 10px;
+      font-style: italic;
     }
 
     @media (max-width: 600px) {
@@ -163,10 +200,18 @@
       <button onclick="zerar()" class="btn-zerar">🔄 Zerar</button>
     </div>
 
+    <div class="button-group">
+      <button onclick="salvarManualmente()" class="btn-salvar">💾 Salvar Progresso</button>
+    </div>
+
     <div id="mensagem"></div>
 
+    <div class="status-salvo">
+      <span id="status">Dados salvos automaticamente</span>
+    </div>
+
     <div class="info-box">
-      <strong>💡 Dica:</strong> Seus dados são salvos automaticamente no seu navegador!
+      <strong>💡 Dica:</strong> Seus dados são salvos automaticamente a cada clique. Use o botão "Salvar Progresso" para garantir que tudo foi salvo!
     </div>
   </div>
 
@@ -193,6 +238,20 @@
     // Salvar dados no localStorage
     function salvarDados() {
       localStorage.setItem(STORAGE_KEY, dias);
+      mostrarStatusSalvo();
+    }
+
+    function mostrarStatusSalvo() {
+      const statusEl = document.getElementById('status');
+      statusEl.textContent = '✓ Salvo com sucesso!';
+      
+      setTimeout(() => {
+        statusEl.textContent = 'Dados salvos automaticamente';
+      }, 2000);
+    }
+
+    function salvarManualmente() {
+      salvarDados();
     }
 
     function atualizarTela() {
