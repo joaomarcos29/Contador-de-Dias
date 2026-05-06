@@ -5,56 +5,173 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contador de Dias</title>
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       text-align: center;
-      background: #f5f5f5;
-      padding: 50px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      max-width: 500px;
+      width: 100%;
     }
 
     h1 {
       font-size: 2.5em;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: #777;
+      font-size: 0.9em;
+      margin-bottom: 30px;
     }
 
     #contador {
-      font-size: 2em;
-      margin: 20px 0;
+      font-size: 3em;
+      font-weight: bold;
+      margin: 30px 0;
+      color: #667eea;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 30px 0;
     }
 
     button {
-      padding: 10px 20px;
-      margin: 10px;
+      padding: 12px 24px;
       font-size: 1em;
       cursor: pointer;
       border: none;
-      border-radius: 8px;
-      background-color: #4CAF50;
+      border-radius: 10px;
+      background-color: #667eea;
       color: white;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
     }
 
     button:hover {
-      background-color: #45a049;
+      background-color: #764ba2;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .btn-zerar {
+      background-color: #ff6b6b;
+      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+    }
+
+    .btn-zerar:hover {
+      background-color: #ee5a52;
+      box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
     }
 
     #mensagem {
-      margin-top: 20px;
-      font-size: 1.2em;
+      margin-top: 30px;
+      font-size: 1.1em;
       color: #333;
+      min-height: 60px;
+      animation: slideIn 0.5s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .info-box {
+      background: #f0f4ff;
+      border-left: 4px solid #667eea;
+      padding: 15px;
+      margin-top: 20px;
+      border-radius: 8px;
+      text-align: left;
+      font-size: 0.9em;
+      color: #555;
+    }
+
+    .info-box strong {
+      color: #667eea;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 2em;
+      }
+
+      #contador {
+        font-size: 2.5em;
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 0.9em;
+      }
+
+      .button-group {
+        gap: 8px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <h1>Contador de Dias</h1>
-  <div id="contador">0 dias</div>
+  <div class="container">
+    <h1>⏰ Contador de Dias</h1>
+    <p class="subtitle">Acompanhe seu progresso com motivação</p>
+    
+    <div id="contador">0 dias</div>
 
-  <button onclick="alterarDias(1)">+1 dia</button>
-  <button onclick="alterarDias(-1)">-1 dia</button>
-  <button onclick="zerar()">Zerar</button>
+    <div class="button-group">
+      <button onclick="alterarDias(1)">➕ +1 dia</button>
+      <button onclick="alterarDias(-1)">➖ -1 dia</button>
+      <button onclick="zerar()" class="btn-zerar">🔄 Zerar</button>
+    </div>
 
-  <div id="mensagem"></div>
+    <div id="mensagem"></div>
+
+    <div class="info-box">
+      <strong>💡 Dica:</strong> Seus dados são salvos automaticamente no seu navegador!
+    </div>
+  </div>
 
   <script>
+    const STORAGE_KEY = 'contadorDias';
     let dias = 0;
 
     const versiculos = [
@@ -64,6 +181,19 @@
       "Romanos 8:28 - Todas as coisas cooperam para o bem.",
       "Josué 1:9 - Seja forte e corajoso."
     ];
+
+    // Carregar dados do localStorage na inicialização
+    function carregarDados() {
+      const dadosSalvos = localStorage.getItem(STORAGE_KEY);
+      if (dadosSalvos !== null) {
+        dias = parseInt(dadosSalvos);
+      }
+    }
+
+    // Salvar dados no localStorage
+    function salvarDados() {
+      localStorage.setItem(STORAGE_KEY, dias);
+    }
 
     function atualizarTela() {
       let anos = Math.floor(dias / 365);
@@ -102,14 +232,18 @@
 
       atualizarTela();
       mostrarMensagem();
+      salvarDados();
     }
 
     function zerar() {
       dias = 0;
       atualizarTela();
       document.getElementById("mensagem").innerText = "";
+      salvarDados();
     }
 
+    // Inicializar
+    carregarDados();
     atualizarTela();
   </script>
 
