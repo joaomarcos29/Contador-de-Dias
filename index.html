@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contador de Dias</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f5f5f5;
+      padding: 50px;
+    }
+
+    h1 {
+      font-size: 2.5em;
+    }
+
+    #contador {
+      font-size: 2em;
+      margin: 20px 0;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 1em;
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #mensagem {
+      margin-top: 20px;
+      font-size: 1.2em;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Contador de Dias</h1>
+  <div id="contador">0 dias</div>
+
+  <button onclick="alterarDias(1)">+1 dia</button>
+  <button onclick="alterarDias(-1)">-1 dia</button>
+  <button onclick="zerar()">Zerar</button>
+
+  <div id="mensagem"></div>
+
+  <script>
+    let dias = 0;
+
+    const versiculos = [
+      "Filipenses 4:13 - Tudo posso naquele que me fortalece.",
+      "Salmos 23:1 - O Senhor é o meu pastor, nada me faltará.",
+      "Isaías 41:10 - Não temas, porque eu sou contigo.",
+      "Romanos 8:28 - Todas as coisas cooperam para o bem.",
+      "Josué 1:9 - Seja forte e corajoso."
+    ];
+
+    function atualizarTela() {
+      let anos = Math.floor(dias / 365);
+      let restoDias = dias % 365;
+
+      let texto = "";
+
+      if (anos > 0) {
+        texto += anos + " ano" + (anos > 1 ? "s" : "");
+        if (restoDias > 0) {
+          texto += " e " + restoDias + " dia" + (restoDias > 1 ? "s" : "");
+        }
+      } else {
+        texto = dias + " dia" + (dias !== 1 ? "s" : "");
+      }
+
+      document.getElementById("contador").innerText = texto;
+    }
+
+    function mostrarMensagem() {
+      let mensagem = "";
+
+      if (dias > 0 && dias % 365 === 0) {
+        let versiculo = versiculos[Math.floor(Math.random() * versiculos.length)];
+        mensagem = "🎉 Um ano completo! " + versiculo;
+      } else if (dias > 0 && dias % 30 === 0) {
+        mensagem = "👏 Parabéns, você está vencendo!";
+      }
+
+      document.getElementById("mensagem").innerText = mensagem;
+    }
+
+    function alterarDias(valor) {
+      dias += valor;
+      if (dias < 0) dias = 0;
+
+      atualizarTela();
+      mostrarMensagem();
+    }
+
+    function zerar() {
+      dias = 0;
+      atualizarTela();
+      document.getElementById("mensagem").innerText = "";
+    }
+
+    atualizarTela();
+  </script>
+
+</body>
+</html>
